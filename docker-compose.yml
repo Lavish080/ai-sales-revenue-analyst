@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  sales-analyst:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-sales-analyst
+    ports:
+      - "8501:8501"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_SERVER_ENABLECORS=true
+      - STREAMLIT_SERVER_ENABLEXSRFPROTECTION=false
+    volumes:
+      - ./data:/app/data
+      - ./sales_data.db:/app/sales_data.db
+    networks:
+      - sales-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a simple Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: ai-sales-analyst-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - sales-analyst
+    networks:
+      - sales-network
+    restart: unless-stopped
+
+networks:
+  sales-network:
+    driver: bridge
