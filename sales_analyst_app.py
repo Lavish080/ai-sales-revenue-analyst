@@ -12,28 +12,302 @@ import json
 
 # Page config
 st.set_page_config(
-    page_title="AI Sales & Revenue Analyst",
-    page_icon="📈",
+    page_title="AI Sales Analyst",
+    page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Custom CSS
+# ==================== MODERN UI CSS ====================
 st.markdown("""
-    <style>
-    .main-header { font-size: 2.5em; color: #1f77b4; margin-bottom: 0.5em; }
-    .metric-card { 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 10px 0;
-    }
-    .negative { color: #ff6b6b; }
-    .positive { color: #51cf66; }
-    </style>
-""", unsafe_allow_html=True)
+<style>
 
+/* ---------- GLOBAL ---------- */
+
+.stApp {
+    background:
+        radial-gradient(circle at 15% 10%, rgba(55, 90, 180, 0.15), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(130, 65, 210, 0.12), transparent 30%),
+        #080d16;
+}
+
+.main .block-container {
+    max-width: 1500px;
+    padding-top: 1.2rem;
+    padding-bottom: 3rem;
+}
+
+
+/* ---------- HIDE SIDEBAR ---------- */
+
+[data-testid="stSidebar"] {
+    display: none;
+}
+
+[data-testid="collapsedControl"] {
+    display: none;
+}
+
+
+/* ---------- TOP HEADER ---------- */
+
+.top-header {
+    background: linear-gradient(
+        90deg,
+        rgba(20, 39, 72, 0.95),
+        rgba(12, 30, 55, 0.95)
+    );
+
+    border-bottom: 1px solid rgba(100, 150, 220, 0.18);
+
+    padding: 18px 28px;
+
+    border-radius: 0 0 18px 18px;
+
+    margin-bottom: 12px;
+
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+.brand-title {
+    font-size: 26px;
+    font-weight: 750;
+    color: white;
+    margin-bottom: 2px;
+}
+
+.brand-subtitle {
+    font-size: 14px;
+    color: #aebbd0;
+}
+
+.brand-right {
+    text-align: right;
+    color: #cbd7ea;
+    font-size: 13px;
+}
+
+
+/* ---------- NAVIGATION ---------- */
+
+div[data-testid="stRadio"] > label {
+    display: none;
+}
+
+div[data-testid="stRadio"] > div {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+div[data-testid="stRadio"] label {
+    flex: 1;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        rgba(25, 39, 61, 0.95),
+        rgba(15, 28, 47, 0.95)
+    );
+
+    border: 1px solid rgba(120, 145, 180, 0.35);
+
+    border-radius: 18px;
+
+    padding: 13px 15px;
+
+    min-height: 48px;
+
+    transition: all 0.25s ease;
+}
+
+div[data-testid="stRadio"] label:hover {
+    border-color: rgba(100, 150, 255, 0.8);
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 20px rgba(50,100,255,0.15);
+}
+
+div[data-testid="stRadio"] label:has(input:checked) {
+    background: linear-gradient(
+        90deg,
+        #467cff,
+        #8748f5
+    );
+
+    border-color: transparent;
+
+    box-shadow:
+        0 5px 25px rgba(90, 80, 255, 0.35);
+
+    color: white;
+}
+
+div[data-testid="stRadio"] label p {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+
+/* ---------- PAGE HEADER ---------- */
+
+.main-header {
+    font-size: 2.6rem;
+    font-weight: 750;
+
+    background: linear-gradient(
+        90deg,
+        #8ca8ff,
+        #c48cff
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    margin-top: 25px;
+    margin-bottom: 18px;
+}
+
+
+/* ---------- AI HERO ---------- */
+
+.ai-hero {
+    background:
+        linear-gradient(
+            110deg,
+            rgba(18, 46, 84, 0.95),
+            rgba(45, 35, 95, 0.95)
+        );
+
+    border: 1px solid rgba(90, 130, 220, 0.35);
+
+    border-radius: 22px;
+
+    padding: 28px 32px;
+
+    margin: 10px 0 22px 0;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.25);
+}
+
+.ai-title {
+    font-size: 34px;
+    font-weight: 750;
+    color: white;
+}
+
+.ai-description {
+    font-size: 17px;
+    color: #c8d5ea;
+    margin-top: 6px;
+}
+
+.ai-badge {
+    background: rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    color: #d9cfff;
+    font-style: italic;
+}
+
+
+/* ---------- CARDS ---------- */
+
+[data-testid="stMetric"] {
+    background: linear-gradient(
+        145deg,
+        rgba(20, 40, 60, 0.95),
+        rgba(12, 25, 42, 0.95)
+    );
+
+    border: 1px solid rgba(80, 130, 190, 0.25);
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+}
+
+
+/* ---------- BUTTONS ---------- */
+
+.stButton > button {
+    border-radius: 14px;
+
+    border: 1px solid rgba(100, 140, 220, 0.4);
+
+    background: linear-gradient(
+        90deg,
+        #477fff,
+        #8b48f5
+    );
+
+    color: white;
+
+    font-weight: 650;
+
+    min-height: 48px;
+
+    transition: all 0.25s ease;
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 25px rgba(80, 90, 255, 0.3);
+}
+
+
+/* ---------- INFO BOX ---------- */
+
+[data-testid="stAlert"] {
+    border-radius: 14px;
+}
+
+
+/* ---------- SECTION HEADINGS ---------- */
+
+h2, h3 {
+    color: #f1f5ff;
+}
+
+
+/* ---------- INPUTS ---------- */
+
+div[data-baseweb="input"] {
+    border-radius: 12px;
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 900px) {
+
+    div[data-testid="stRadio"] > div {
+        flex-wrap: wrap;
+    }
+
+    div[data-testid="stRadio"] label {
+        flex: 1 1 45%;
+    }
+
+    .ai-title {
+        font-size: 26px;
+    }
+
+    .main-header {
+        font-size: 2rem;
+    }
+}
+
+</style>
+""", unsafe_allow_html=True)
 # Initialize session state
 if 'data' not in st.session_state:
     st.session_state.data = None
@@ -43,10 +317,44 @@ if 'insights' not in st.session_state:
     st.session_state.insights = None
 
 # Sidebar Navigation
-st.sidebar.markdown("# 📊 AI Sales Analyst")
-page = st.sidebar.radio(
+# ==================== TOP HEADER ====================
+
+header_col1, header_col2 = st.columns([3, 1])
+
+with header_col1:
+    st.markdown("""
+    <div class="top-header">
+        <div class="brand-title">📊 AI Sales Analyst</div>
+        <div class="brand-subtitle">
+            Turn Your Data Into Growth
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with header_col2:
+    st.markdown("""
+    <div class="top-header">
+        <div class="brand-right">
+            <b>AI Sales Analyst v1.0</b><br>
+            ✨ Powered by Google Gemini AI + Streamlit
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ==================== TOP NAVIGATION ====================
+
+page = st.radio(
     "Navigation",
-    ["📤 Upload Data", "📈 Analytics Dashboard", "🤖 AI Insights", "💡 Recommendations", "📋 Data Explorer"]
+    [
+        "📤 Upload Data",
+        "📊 Analytics Dashboard",
+        "🤖 AI Insights",
+        "💡 Recommendations",
+        "📁 Data Explorer"
+    ],
+    horizontal=True,
+    label_visibility="collapsed"
 )
 
 # ==================== PAGE 1: UPLOAD DATA ====================
@@ -406,7 +714,3 @@ elif page == "📋 Data Explorer":
             file_name=f"sales_data_{datetime.now().strftime('%Y%m%d')}.csv",
             mime="text/csv"
         )
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("📧 **AI Sales Analyst v1.0**")
-st.sidebar.markdown("Powered by Google Gemini AI + Streamlit")
