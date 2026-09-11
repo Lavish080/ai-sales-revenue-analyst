@@ -15,7 +15,7 @@ class AIInsightGenerator:
         if not api_key:
             raise ValueError("GEMINI_API_KEY is not configured. Add it to Streamlit Secrets or your environment.")
         self.client = genai.Client(api_key=api_key)
-        self.model = "gemini-2.5-flash"
+        self.model = "gemini-3.6-flash"
     
     def generate_insights(self, df: pd.DataFrame) -> Dict[str, Any]:
         """Generate comprehensive AI insights from sales data"""
