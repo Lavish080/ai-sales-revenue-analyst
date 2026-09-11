@@ -36,7 +36,7 @@ An intelligent sales analytics platform that uses AI to automatically analyze sa
 ### Prerequisites
 - Python 3.8+
 - pip (Python package manager)
-- Anthropic API key (for Claude AI)
+- Google Gemini API key (for Google Gemini AI)
 
 ### Installation
 
@@ -59,12 +59,12 @@ pip install -r requirements.txt
 4. **Set up your API key**
 ```bash
 # Create a .env file
-echo "ANTHROPIC_API_KEY=your_key_here" > .env
+echo "GEMINI_API_KEY=your_key_here" > .env
 ```
 
 Or set it as an environment variable:
 ```bash
-export ANTHROPIC_API_KEY=your_key_here
+export GEMINI_API_KEY=your_key_here
 ```
 
 5. **Run the application**
@@ -80,7 +80,7 @@ The app will open in your browser at `http://localhost:8501`
 ai-sales-analyst/
 ├── sales_analyst_app.py          # Main Streamlit application
 ├── sales_analyzer.py              # Data analysis engine
-├── ai_insights.py                 # AI-powered insights using Claude
+├── ai_insights.py                 # AI-powered insights using Gemini
 ├── sample_data.py                 # Sample data generator
 ├── requirements.txt               # Python dependencies
 ├── README.md                      # This file
@@ -128,7 +128,7 @@ date,product,region,customer_id,customer_type,salesperson,quantity,price,discoun
 ### Step 3: Generate AI Insights
 - Go to **🤖 AI Insights**
 - Click "Generate AI Analysis"
-- Wait for Claude to analyze your data
+- Wait for Gemini to analyze your data
 - Review automatic insights and findings
 
 ### Step 4: Review Recommendations
@@ -156,7 +156,7 @@ The AI Insight Generator:
    - Monthly trends
    - Detected anomalies
 
-3. **Sends to Claude AI** with detailed analysis prompt
+3. **Sends to Google Gemini AI** with detailed analysis prompt
 4. **Receives structured insights** including:
    - Executive summary
    - Revenue analysis with comparisons
@@ -215,7 +215,7 @@ def get_by_new_dimension(self, df: pd.DataFrame, dimension: str):
 Edit the prompt in `ai_insights.py`:
 ```python
 def _create_analysis_prompt(self, data: Dict[str, Any]) -> str:
-    # Customize the analysis request to Claude
+    # Customize the analysis request to Gemini
     pass
 ```
 
@@ -232,7 +232,7 @@ fig.update_layout(
 
 1. **API Key**: Keep your `.env` file secure and never commit it
 2. **Data Privacy**: 
-   - Sales data is sent to Claude API
+   - Sales data is sent to Gemini API
    - Consider using only summary statistics for sensitive data
    - Check Anthropic's privacy policy
 3. **File Upload**: Only upload CSV files, validate data before processing
@@ -262,7 +262,7 @@ pip install -r requirements.txt --upgrade
 ### "API key not found"
 Ensure `.env` file exists with:
 ```
-ANTHROPIC_API_KEY=your_actual_key_here
+GEMINI_API_KEY=your_actual_key_here
 ```
 
 ### Slow performance with large datasets
@@ -315,8 +315,8 @@ Open source - Use and modify freely
 - [Streamlit Documentation](https://docs.streamlit.io/)
 - [Pandas User Guide](https://pandas.pydata.org/docs/)
 - [Plotly Graph Objects](https://plotly.com/python/)
-- [Anthropic API Documentation](https://docs.anthropic.com/)
+- [Gemini API Documentation](https://docs.google-genai.com/)
 
 ---
 
-**Version 1.0** | Built with Python, Streamlit, and Claude AI
+**Version 1.0** | Built with Python, Streamlit, and Google Gemini AI

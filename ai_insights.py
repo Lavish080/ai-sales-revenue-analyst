@@ -1,17 +1,21 @@
 import json
-import anthropic
+import os
+from google import genai
 import pandas as pd
 from sales_analyzer import SalesAnalyzer
 from typing import Dict, Any
 
 class AIInsightGenerator:
-    """Generates AI-powered insights using Claude API"""
+    """Generates AI-powered insights using Google Gemini API"""
     
     def __init__(self, data: pd.DataFrame, analyzer: SalesAnalyzer):
         self.data = data
         self.analyzer = analyzer
-        self.client = anthropic.Anthropic()
-        self.model = "claude-sonnet-4-6"
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY is not configured. Add it to Streamlit Secrets or your environment.")
+        self.client = genai.Client(api_key=api_key)
+        self.model = "gemini-2.5-flash"
     
     def generate_insights(self, df: pd.DataFrame) -> Dict[str, Any]:
         """Generate comprehensive AI insights from sales data"""
@@ -19,23 +23,17 @@ class AIInsightGenerator:
         # Gather all analytical data
         analysis_data = self._prepare_analysis_data(df)
         
-        # Create prompt for Claude
+        # Create prompt for Gemini
         prompt = self._create_analysis_prompt(analysis_data)
         
-        # Call Claude API
-        response = self.client.messages.create(
+        # Call Gemini API
+        response = self.client.models.generate_content(
             model=self.model,
-            max_tokens=2000,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
+            contents=prompt
         )
-        
+
         # Parse response
-        response_text = response.content[0].text
+        response_text = response.text or ""
         
         # Extract insights
         insights = self._parse_insights(response_text, analysis_data)
@@ -84,7 +82,7 @@ class AIInsightGenerator:
         return data
     
     def _create_analysis_prompt(self, data: Dict[str, Any]) -> str:
-        """Create the analysis prompt for Claude"""
+        """Create the analysis prompt for Gemini"""
         
         prompt = f"""
 You are an expert sales analyst. Analyze the following sales data and provide insights in JSON format.
@@ -209,7 +207,7 @@ Be specific with numbers and percentages. Focus on actionable insights.
         return formatted
     
     def _parse_insights(self, response_text: str, analysis_data: Dict) -> Dict[str, Any]:
-        """Parse Claude's response into structured insights"""
+        """Parse Gemini's response into structured insights"""
         try:
             # Extract JSON from response
             start = response_text.find('{')

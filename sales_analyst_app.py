@@ -402,4 +402,4 @@ elif page == "📋 Data Explorer":
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("📧 **AI Sales Analyst v1.0**")
-st.sidebar.markdown("Powered by Claude AI + Streamlit")
+st.sidebar.markdown("Powered by Google Gemini AI + Streamlit")
