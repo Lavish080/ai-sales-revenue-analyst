@@ -287,8 +287,17 @@ elif page == "🤖 AI Insights":
             
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.metric("Current Period Revenue", 
-                         f"${revenue_section.get('total_revenue', 0):,.2f}")
+                total_revenue = revenue_section.get('total_revenue', 0)
+
+try:
+    total_revenue = float(str(total_revenue).replace('$', '').replace(',', ''))
+except (ValueError, TypeError):
+    total_revenue = 0
+
+st.metric(
+    "Current Period Revenue",
+    f"${total_revenue:,.2f}"
+)
             with col2:
                 st.metric("MoM Change", 
                          f"{revenue_section.get('mom_change', 0):+.1f}%",
