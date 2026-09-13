@@ -524,7 +524,8 @@ elif page == "🤖 AI Insights":
     if st.session_state.data is None:
         st.warning("⚠️ Please upload data first!")
     else:
-                st.markdown("""
+        
+        st.markdown("""
         <div class="ai-hero">
 
             <div class="ai-hero-left">
