@@ -521,98 +521,155 @@ elif page == "📊 Analytics Dashboard":
 
 # ==================== PAGE 3: AI INSIGHTS ====================
 elif page == "🤖 AI Insights":
+
     if st.session_state.data is None:
         st.warning("⚠️ Please upload data first!")
+
     else:
-        st.markdown("""
-    <div class="ai-hero">
-    <div class="ai-hero-left">
-        <div class="ai-icon">🤖</div>
 
-        <div>
-            <div class="ai-title">AI-Powered Insights</div>
-            <div class="ai-description">
-                Get intelligent analysis and actionable insights from your sales data
-            </div>
-        </div>
-    </div>
+        # ==================== AI HERO ====================
+        st.markdown(
+            '''<div class="ai-hero">
+                <div class="ai-hero-left">
+                    <div class="ai-icon">🤖</div>
+                    <div>
+                        <div class="ai-title">AI-Powered Insights</div>
+                        <div class="ai-description">
+                            Get intelligent analysis and actionable insights from your sales data
+                        </div>
+                    </div>
+                </div>
+                <div class="ai-status">✨ Gemini AI</div>
+            </div>''',
+            unsafe_allow_html=True
+        )
 
-    <div class="ai-status">✨ Gemini AI</div>
-</div>
-""", unsafe_allow_html=True)
-
-        # Date range
+        # ==================== DATE RANGE ====================
         col1, col2 = st.columns(2)
 
         with col1:
             start_date = st.date_input(
                 "Analysis Start Date",
-                value=st.session_state.data['date'].min()
+                value=st.session_state.data["date"].min()
             )
 
         with col2:
             end_date = st.date_input(
                 "Analysis End Date",
-                value=st.session_state.data['date'].max()
+                value=st.session_state.data["date"].max()
             )
-            
-# Generate AI Analysis
-if st.button("🚀 Generate AI Analysis", use_container_width=True):
-    with st.spinner("Analyzing sales data with AI..."):
-        try:
-            analyzer = SalesAnalyzer(st.session_state.data)
-            insight_gen = AIInsightGenerator(st.session_state.data, analyzer)
 
-            insights = insight_gen.generate_insights(filtered_df)
-            st.session_state.insights = insights
+        # ==================== FILTER DATA ====================
+        filtered_df = st.session_state.data[
+            (st.session_state.data["date"] >= pd.Timestamp(start_date)) &
+            (st.session_state.data["date"] <= pd.Timestamp(end_date))
+        ]
 
-        except Exception as e:
-            st.error(f"Error generating insights: {str(e)}")
+        # ==================== GENERATE AI ANALYSIS ====================
+        if st.button(
+            "🚀 Generate AI Analysis",
+            use_container_width=True
+        ):
 
-# Main Insight Card
-if st.session_state.insights:
-    insights = st.session_state.insights
+            with st.spinner("Analyzing sales data with AI..."):
 
-    st.markdown("### 🎯 Executive Summary")
-    st.info(insights.get('summary', ''))
-            
-    # Revenue Analysis
-    st.markdown("### 💹 Revenue Analysis")
-    revenue_section = insights.get('revenue_analysis', {})
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        total_revenue = revenue_section.get('total_revenue', 0)
-        
-        try:
-            total_revenue = float(
-                str(total_revenue).replace('$', '').replace(',', '')
+                try:
+                    analyzer = SalesAnalyzer(
+                        st.session_state.data
+                    )
+
+                    insight_gen = AIInsightGenerator(
+                        st.session_state.data,
+                        analyzer
+                    )
+
+                    insights = insight_gen.generate_insights(
+                        filtered_df
+                    )
+
+                    st.session_state.insights = insights
+
+                except Exception as e:
+                    st.error(
+                        f"Error generating insights: {str(e)}"
+                    )
+
+        # ==================== DISPLAY INSIGHTS ====================
+        if st.session_state.insights:
+
+            insights = st.session_state.insights
+
+            # Executive Summary
+            st.markdown("### 🎯 Executive Summary")
+            st.info(
+                insights.get("summary", "")
             )
-        except (ValueError, TypeError):
-            total_revenue = 0
-            
-            st.metric(
-                "Current Period Revenue",
-                f"${total_revenue:,.2f}"
+
+            # ==================== REVENUE ANALYSIS ====================
+            st.markdown("### 💹 Revenue Analysis")
+
+            revenue_section = insights.get(
+                "revenue_analysis",
+                {}
             )
-            with col2:
-                st.metric("MoM Change", 
-                         f"{revenue_section.get('mom_change', 0):+.1f}%",
-                         delta_color="normal")
-            with col3:
-                st.metric("YoY Change", 
-                         f"{revenue_section.get('yoy_change', 0):+.1f}%")
-            
-            # Dimensional Analysis
-            st.markdown("### 📊 Analysis by Dimension")
-            
-            col1, col2 = st.columns(2)
-            
+
+            col1, col2, col3 = st.columns(3)
+
             with col1:
+
+                total_revenue = revenue_section.get(
+                    "total_revenue",
+                    0
+                )
+
+                try:
+                    total_revenue = float(
+                        str(total_revenue)
+                        .replace("$", "")
+                        .replace(",", "")
+                    )
+
+                except (ValueError, TypeError):
+                    total_revenue = 0
+
+                st.metric(
+                    "Current Period Revenue",
+                    f"${total_revenue:,.2f}"
+                )
+
+            with col2:
+
+                st.metric(
+                    "MoM Change",
+                    f"{revenue_section.get('mom_change', 0):+.1f}%",
+                    delta_color="normal"
+                )
+
+            with col3:
+
+                st.metric(
+                    "YoY Change",
+                    f"{revenue_section.get('yoy_change', 0):+.1f}%"
+                )
+
+            # ==================== DIMENSIONAL ANALYSIS ====================
+            st.markdown("### 📊 Analysis by Dimension")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+
                 st.markdown("**Top Performing Products:**")
-                products = revenue_section.get('top_products', [])
+
+                products = revenue_section.get(
+                    "top_products",
+                    []
+                )
+
                 for i, prod in enumerate(products[:3], 1):
-                    st.write(f"{i}. {prod['name']}: {prod['change']:+.1f}% ({prod['revenue']})")
+                    st.write(
+                        f"{i}. {prod}"
+                    )
             
             with col2:
                 st.markdown("**Regional Performance:**")
