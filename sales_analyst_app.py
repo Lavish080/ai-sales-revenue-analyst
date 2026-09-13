@@ -298,42 +298,6 @@ if 'insights' not in st.session_state:
     st.session_state.insights = None
 
 # Sidebar Navigation
-# ==================== TOP HEADER ====================
-st.markdown("""
-<div class="top-header">
-
-    <div class="header-left">
-
-        <div class="brand-icon">
-            📊
-        </div>
-
-        <div>
-            <div class="brand-title">
-                AI Sales Analyst
-            </div>
-
-            <div class="brand-subtitle">
-                Turn Your Data Into Growth
-            </div>
-        </div>
-
-    </div>
-
-    <div class="header-right">
-
-        <div class="version">
-            AI Sales Analyst v1.0
-        </div>
-
-        <div class="powered">
-            ✨ Powered by Google Gemini AI + Streamlit
-        </div>
-
-    </div>
-
-</div>
-""", unsafe_allow_html=True)
 
 # ==================== TOP NAVIGATION ====================
 if "page" not in st.session_state:
