@@ -525,32 +525,32 @@ elif page == "🤖 AI Insights":
         st.warning("⚠️ Please upload data first!")
     else:
         st.markdown("""
-<div class="ai-hero">
+        <div class="ai-hero">
 
-    <div class="ai-hero-left">
+            <div class="ai-hero-left">
 
-        <div class="ai-icon">
-            🤖
-        </div>
+                <div class="ai-icon">
+                    🤖
+                </div>
 
-        <div>
-            <div class="ai-title">
-                AI-Powered Insights
+                <div>
+                    <div class="ai-title">
+                        AI-Powered Insights
+                    </div>
+
+                    <div class="ai-description">
+                        Get intelligent analysis and actionable insights from your sales data
+                    </div>
+                </div>
+
             </div>
 
-            <div class="ai-description">
-                Get intelligent analysis and actionable insights from your sales data
+            <div class="ai-status">
+                ✨ Gemini AI
             </div>
+
         </div>
-
-    </div>
-
-    <div class="ai-status">
-        ✨ Gemini AI
-    </div>
-
-</div>
-""", unsafe_allow_html=True)      
+        """, unsafe_allow_html=True)
         # Date range
         col1, col2 = st.columns(2)
         with col1:
