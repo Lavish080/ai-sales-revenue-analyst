@@ -411,11 +411,11 @@ if page == "📤 Upload Data":
             st.rerun()
 
 # ==================== PAGE 2: ANALYTICS DASHBOARD ====================
-elif page == "📈 Analytics Dashboard":
+elif page == ""📊 Analytics Dashboard"":
     if st.session_state.data is None:
         st.warning("⚠️ Please upload data first!")
     else:
-        st.markdown('<div class="main-header">📈 Analytics Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header"📊 Analytics Dashboard"</div>', unsafe_allow_html=True)
         
         # Initialize analyzer
         analyzer = SalesAnalyzer(st.session_state.data)
@@ -685,7 +685,7 @@ elif page == "💡 Recommendations":
                     st.metric("Priority", f"{color} {priority}")
 
 # ==================== PAGE 5: DATA EXPLORER ====================
-elif page == "📋 Data Explorer":
+elif page == "📁 Data Explorer":
     if st.session_state.data is None:
         st.warning("⚠️ Please upload data first!")
     else:
