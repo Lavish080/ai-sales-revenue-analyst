@@ -556,29 +556,45 @@ elif page == "🤖 AI Insights":
                 value=st.session_state.data['date'].max()
             )
             
-        # Main Insight Card
-            st.markdown("### 🎯 Executive Summary")
-            st.info(insights.get('summary', ''))
+# Generate AI Analysis
+if st.button("🚀 Generate AI Analysis", use_container_width=True):
+    with st.spinner("Analyzing sales data with AI..."):
+        try:
+            analyzer = SalesAnalyzer(st.session_state.data)
+            insight_gen = AIInsightGenerator(st.session_state.data, analyzer)
+
+            insights = insight_gen.generate_insights(filtered_df)
+            st.session_state.insights = insights
+
+        except Exception as e:
+            st.error(f"Error generating insights: {str(e)}")
+
+# Main Insight Card
+if st.session_state.insights:
+    insights = st.session_state.insights
+
+    st.markdown("### 🎯 Executive Summary")
+    st.info(insights.get('summary', ''))
             
-            # Revenue Analysis
-            st.markdown("### 💹 Revenue Analysis")
-            revenue_section = insights.get('revenue_analysis', {})
+    # Revenue Analysis
+    st.markdown("### 💹 Revenue Analysis")
+    revenue_section = insights.get('revenue_analysis', {})
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        total_revenue = revenue_section.get('total_revenue', 0)
+        
+        try:
+            total_revenue = float(
+                str(total_revenue).replace('$', '').replace(',', '')
+            )
+        except (ValueError, TypeError):
+            total_revenue = 0
             
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                total_revenue = revenue_section.get('total_revenue', 0)
-                
-                try:
-                    total_revenue = float(
-                        str(total_revenue).replace('$', '').replace(',', '')
-                    )
-                except (ValueError, TypeError):
-                    total_revenue = 0
-                    
-                st.metric(
-                    "Current Period Revenue",
-                    f"${total_revenue:,.2f}"
-                )
+            st.metric(
+                "Current Period Revenue",
+                f"${total_revenue:,.2f}"
+            )
             with col2:
                 st.metric("MoM Change", 
                          f"{revenue_section.get('mom_change', 0):+.1f}%",
