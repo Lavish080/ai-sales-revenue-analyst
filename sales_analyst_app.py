@@ -524,62 +524,37 @@ elif page == "🤖 AI Insights":
     if st.session_state.data is None:
         st.warning("⚠️ Please upload data first!")
     else:
-        
         st.markdown("""
         <div class="ai-hero">
-
             <div class="ai-hero-left">
-
-                <div class="ai-icon">
-                    🤖
-                </div>
+                <div class="ai-icon">🤖</div>
 
                 <div>
-                    <div class="ai-title">
-                        AI-Powered Insights
-                    </div>
-
+                    <div class="ai-title">AI-Powered Insights</div>
                     <div class="ai-description">
                         Get intelligent analysis and actionable insights from your sales data
                     </div>
                 </div>
-
             </div>
 
-            <div class="ai-status">
-                ✨ Gemini AI
-            </div>
-
+            <div class="ai-status">✨ Gemini AI</div>
         </div>
         """, unsafe_allow_html=True)
-        
+
         # Date range
         col1, col2 = st.columns(2)
+
         with col1:
-            start_date = st.date_input("Analysis Start Date", value=st.session_state.data['date'].min())
+            start_date = st.date_input(
+                "Analysis Start Date",
+                value=st.session_state.data['date'].min()
+            )
+
         with col2:
-            end_date = st.date_input("Analysis End Date", value=st.session_state.data['date'].max())
-        
-        filtered_df = st.session_state.data[
-            (st.session_state.data['date'] >= pd.Timestamp(start_date)) &
-            (st.session_state.data['date'] <= pd.Timestamp(end_date))
-        ]
-        
-        if st.button("🚀 Generate AI Analysis", use_container_width=True):
-            with st.spinner("Analyzing sales data with AI..."):
-                try:
-                    analyzer = SalesAnalyzer(st.session_state.data)
-                    insight_gen = AIInsightGenerator(st.session_state.data, analyzer)
-                    
-                    insights = insight_gen.generate_insights(filtered_df)
-                    st.session_state.insights = insights
-                    
-                except Exception as e:
-                    st.error(f"Error generating insights: {str(e)}")
-        
-        if st.session_state.insights:
-            insights = st.session_state.insights
-            
+            end_date = st.date_input(
+                "Analysis End Date",
+                value=st.session_state.data['date'].max()
+            )
             # Main Insight Card
             st.markdown("### 🎯 Executive Summary")
             st.info(insights.get('summary', ''))
@@ -591,14 +566,18 @@ elif page == "🤖 AI Insights":
             col1, col2, col3 = st.columns(3)
             with col1:
                 total_revenue = revenue_section.get('total_revenue', 0)
+                
                 try:
-                    total_revenue = float(str(total_revenue).replace('$', '').replace(',', ''))
+                    total_revenue = float(
+                        str(total_revenue).replace('$', '').replace(',', '')
+                    )
                 except (ValueError, TypeError):
                     total_revenue = 0
-                    st.metric(
-                        "Current Period Revenue",
-                        f"${total_revenue:,.2f}"
-                    )
+                    
+                st.metric(
+                    "Current Period Revenue",
+                    f"${total_revenue:,.2f}"
+                )
             with col2:
                 st.metric("MoM Change", 
                          f"{revenue_section.get('mom_change', 0):+.1f}%",
