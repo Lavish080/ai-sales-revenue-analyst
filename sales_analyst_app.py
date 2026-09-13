@@ -556,8 +556,16 @@ elif page == "🤖 AI Insights":
     if st.session_state.data is None:
         st.warning("⚠️ Please upload data first!")
     else:
-        st.markdown('<div class="main-header">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
-        
+        st.markdown("""
+        <div class="ai-hero">
+        <div class="ai-title">
+        🤖 AI-Powered Insights
+        </div>
+        <div class="ai-description">
+        Get intelligent analysis and actionable insights from your sales data
+        </div>
+        </div>
+        """, unsafe_allow_html=True)        
         # Date range
         col1, col2 = st.columns(2)
         with col1:
