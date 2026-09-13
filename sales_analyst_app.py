@@ -299,7 +299,6 @@ if 'insights' not in st.session_state:
 
 # Sidebar Navigation
 # ==================== TOP HEADER ====================
-
 st.markdown("""
 <div class="top-header">
 
