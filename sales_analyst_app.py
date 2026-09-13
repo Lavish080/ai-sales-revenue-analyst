@@ -555,7 +555,8 @@ elif page == "🤖 AI Insights":
                 "Analysis End Date",
                 value=st.session_state.data['date'].max()
             )
-            # Main Insight Card
+            
+        # Main Insight Card
             st.markdown("### 🎯 Executive Summary")
             st.info(insights.get('summary', ''))
             
