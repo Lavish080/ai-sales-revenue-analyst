@@ -411,7 +411,7 @@ if page == "📤 Upload Data":
             st.rerun()
 
 # ==================== PAGE 2: ANALYTICS DASHBOARD ====================
-elif page == ""📊 Analytics Dashboard"":
+elif page == "📊 Analytics Dashboard":
     if st.session_state.data is None:
         st.warning("⚠️ Please upload data first!")
     else:
