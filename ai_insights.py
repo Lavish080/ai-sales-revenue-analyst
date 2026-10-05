@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from google import genai
 import pandas as pd
 from sales_analyzer import SalesAnalyzer
@@ -27,10 +28,28 @@ class AIInsightGenerator:
         prompt = self._create_analysis_prompt(analysis_data)
         
         # Call Gemini API
-        response = self.client.models.generate_content(
-            model=self.model,
-            contents=prompt
-        )
+        # Call Gemini API with retry
+        response = None
+
+        for attempt in range(3):
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model,
+                    contents=prompt
+                )
+                break
+            except Exception as e:
+                error_message = str(e)
+
+                if "503" in error_message or "UNAVAILABLE" in error_message:
+                    print(f"Gemini temporarily unavailable. Retry {attempt + 1}/3...")
+                    time.sleep(3 * (attempt + 1))
+                else:
+                    raise
+
+        # If Gemini is still unavailable, use fallback insights
+        if response is None:
+            return self._generate_fallback_insights(analysis_data)
 
         # Parse response
         response_text = response.text or ""
